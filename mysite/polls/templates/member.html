@@ -1,0 +1,59 @@
+{% extends  'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block main %}
+<br>
+<div  class="row justify-content-center">
+      <div  class="col-4">
+<div class="card">
+<div class="card-body">
+<h4 class="card-title">Add Member</h4>
+
+    <form method="post" autocomplete="off">
+    {% csrf_token %}
+    <input type="hidden" name="next" value="{{ next }}">
+        {{ form|crispy }}
+        <button type="submit" class="btn btn-primary btn-block" id = "add">Add</button>
+        <br>
+
+</form>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+    let fetchBtn = document.getElementById("add");
+    fetchBtn.addEventListener("click", postbuttonclickhandler);
+
+    function postbuttonclickhandler()
+	{
+      var url = "http://localhost:8000/api/snippets";
+
+      var data = {
+         name :  document.getElementById("id_name").value,
+         date :  document.getElementById("id_date").value,
+         age :  document.getElementById("id_age").value,
+         mobile_no :  document.getElementById("id_mobile_no").value,
+      };
+
+      var json = JSON.stringify(data);
+      var xhr = new XMLHttpRequest();
+      xhr.open("POST", url, true);
+      xhr.setRequestHeader('Content-type','application/json; charset=utf-8');
+      xhr.onload = function () {
+     	var users = JSON.parse(xhr.responseText);
+	    if (xhr.readyState == 4 && xhr.status == "201") {
+		console.table(users);
+		let message = document.getElementById("add");
+		message.innerHTML  = "Data Submit Success !"
+	} else {
+		console.error(users);
+	}
+}
+xhr.send(json);
+}
+
+</<script>
+
+</div>
+</div>
+      </div>
+</div>
+{% endblock %}

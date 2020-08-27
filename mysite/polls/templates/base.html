@@ -1,0 +1,115 @@
+<!doctype  html>
+<html  lang="en">
+<head>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  <title>Django Authentication Example</title>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-primary">
+  <a class="navbar-brand" href="#">Navbar</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">Link</a>
+      </li>
+
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Dropdown
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="#">Action</a>
+          <a class="dropdown-item" href="#">Another action</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="#">Something else here</a>
+        </div>
+      </li>
+      {% if user.is_authenticated %}
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Hello {{user.username }}
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="#">Profile</a>
+          <a class="dropdown-item" href="/logout">Logout</a>
+        </div>
+      </li>
+
+      {% else %}
+       <li class="nav-item">
+        <a class="nav-link" href="/login" style="color:black">Login</a>
+       </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/register" style="color:black">Register</a>
+       </li>
+      {% endif %}
+    </ul>
+    <form class="form-inline my-2 my-lg-0">
+      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+    </form>
+  </div>
+</nav>
+
+
+
+<div  class="container">
+       {% load static %}
+       {% block main %}
+       <br>
+    <center><h3>Product</h3></center>
+  <br>
+        <div class="row">
+            {% for i in 'django'%}
+<div class="col-md-4">
+	<figure class="card card-product">
+		<div class="img-wrap"><img src="{% static '/test.jpg' %}"  width="350px" height="250px"></div>
+		<figcaption class="info-wrap">
+               <center>
+				<h4 class="title">Mobile</h4>
+				<p class="desc">This is Good Product</p>
+               </center>
+				<div class="rating-wrap">
+
+                    <center><div class="label-rating">154 orders </div></center>
+				</div> <!-- rating-wrap.// -->
+		</figcaption>
+		<div class="bottom-wrap">
+            <div class="price-wrap h5">
+				<center><span class="price-new">Rs. 1280</span><center>
+			</div>
+            <center><button type="button" class="btn btn-outline-primary" onclick="view()">View</button>
+
+                    <button type="button" class="btn btn-outline-danger" href="/product">Order</button>
+
+            </center>
+
+			<!-- price-wrap.// -->
+		</div> <!-- bottom-wrap.// -->
+	</figure>
+    <br>
+</div> <!-- col // -->
+
+  {% endfor %}
+            <script>
+    function view()
+    {
+      window.location.href = "http://127.0.0.1:8000/product";
+    }
+</script>
+      {% endblock %}
+
+  </div>
+</body>
+</html>

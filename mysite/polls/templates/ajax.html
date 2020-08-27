@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<!-- Required meta tags -->
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width,
+		initial-scale=1, shrink-to-fit=no" />
+
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href=
+"https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+		integrity=
+"sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+		crossorigin="anonymous" />
+
+	<title>
+		How to use simple API using AJAX ?
+	</title>
+</head>
+
+<body>
+	<button type="button" id="fetchBtn"
+		class="btn btn-primary">
+		Fetch Data
+	</button>
+	<button type="button" id="postBtn"
+		class="btn btn-primary">
+		Post Data
+	</button>
+	<button type="button" id="putBtn"
+		class="btn btn-primary">
+		Put Data
+	</button>
+	<button type="button" id="deleteBtn"
+		class="btn btn-primary">
+		Delete Data
+	</button>
+
+	<button type="button" onclick="myFunction('one')"
+		class="btn btn-primary">
+		one
+	</button>
+	<button type="button" onclick="myFunction('two')"
+		class="btn btn-primary">
+		two
+	</button>
+	<p id="add"></p>
+	<div class="container">
+		<h1>Employee List</h1>
+		<ul id="list"></ul>
+	</div>
+
+	<!-- Optional JavaScript -->
+	<!-- jQuery first, then Popper.js,
+		then Bootstrap JS -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script >
+
+	let fetchBtn = document.getElementById("fetchBtn");
+	let postBtn = document.getElementById("postBtn");
+	let putBtn = document.getElementById("putBtn");
+	let deleteBtn = document.getElementById("deleteBtn");
+
+
+	fetchBtn.addEventListener("click", buttonclickhandler);
+	postBtn.addEventListener("click", postbuttonclickhandler);
+    putBtn.addEventListener("click", putbuttonclickhandler);
+    deleteBtn.addEventListener("click", deletebuttonclickhandler);
+
+function myFunction(type)
+{
+ var url = "http://localhost:8000/api/image-viewer/"+type;
+ var xhr = new XMLHttpRequest();
+
+ xhr.onreadystatechange = function () {
+			if (this.status === 200) {
+
+				// Changing string data into JSON Object
+				obj = JSON.parse(this.responseText);
+
+				// Getting the ul element
+				let list = document.getElementById("list");
+				str = ""
+				console.log(obj)
+				for (key in obj) {
+					str += '<li>${obj[key]}</li>';
+				}
+				list.innerHTML = str;
+			}
+			else {
+				console.log("File not found");
+			}
+		}
+        xhr.open("GET",url, true);
+		// At last send the request
+		xhr.send();
+}
+
+function deletebuttonclickhandler(){
+let message = document.getElementById("add");
+
+var url = "http://localhost:8000/api/snippets1/18/";
+var xhr = new XMLHttpRequest();
+xhr.open("DELETE", url, true);
+xhr.onload = function () {
+
+	if (xhr.readyState == 4 && xhr.status == "204") {
+	   message.innerHTML = "Data Delete  Success !"
+	} else {
+     message.innerHTML = "Error For Delete !"
+	}
+}
+xhr.send(null);
+}
+
+function putbuttonclickhandler()
+    {
+      var url = "http://localhost:8000/api/snippets1/19/";
+      var data = {};
+      data.code = "Very Nice and Update";
+      var json = JSON.stringify(data);
+      var xhr = new XMLHttpRequest();
+      xhr.open("PUT", url, true);
+      xhr.setRequestHeader('Content-type','application/json; charset=utf-8');
+      xhr.onload = function () {
+	  var users = JSON.parse(xhr.responseText);
+	  if (xhr.readyState == 4 && xhr.status == "200") {
+		console.table(users);
+		let message = document.getElementById("add");
+		message.innerHTML = "Data Update  Success !"
+	} else {
+		console.error(users);
+	}
+}
+xhr.send(json);
+}
+
+	function postbuttonclickhandler()
+	{
+       var url = "http://localhost:8000/api/snippets";
+
+      var data = {};
+      data.code = "Post Ajax Api";
+      data.style = "friendly";
+
+      var json = JSON.stringify(data);
+      var xhr = new XMLHttpRequest();
+      xhr.open("POST", url, true);
+      xhr.setRequestHeader('Content-type','application/json; charset=utf-8');
+      xhr.onload = function () {
+     	var users = JSON.parse(xhr.responseText);
+	    if (xhr.readyState == 4 && xhr.status == "201") {
+		console.table(users);
+		let message = document.getElementById("add");
+		message.innerHTML  = "Data Submit Success !"
+	} else {
+		console.error(users);
+	}
+}
+xhr.send(json);
+}
+
+	function buttonclickhandler() {
+
+		// Instantiate an new XHR Object
+		const xhr = new XMLHttpRequest();
+
+		// Open an obejct (GET/POST, PATH,
+		// ASYN-TRUE/FALSE)
+		xhr.open("GET","http://localhost:8000/api/snippets", true);
+
+
+
+
+		// When response is ready
+		xhr.onload = function () {
+			if (this.status === 200) {
+
+				// Changing string data into JSON Object
+				obj = JSON.parse(this.responseText);
+
+				// Getting the ul element
+				let list = document.getElementById("list");
+				str = ""
+				for (key in obj) {
+					str += `<li>${obj[key].code}</li>`;
+				}
+				list.innerHTML = str;
+			}
+			else {
+				console.log("File not found");
+			}
+		}
+
+		// At last send the request
+		xhr.send();
+	}
+</script>
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src=
+"https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+		integrity=
+"sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+		crossorigin="anonymous">
+	</script>
+
+	<script src=
+"https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+		integrity=
+"sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+		crossorigin="anonymous">
+	</script>
+</body>
+
+</html>

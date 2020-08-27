@@ -1,0 +1,62 @@
+{% extends  'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block main %}
+
+
+
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script type="text/javascript">
+
+    function updateCaptcha() {
+      grecaptcha.execute('{{ recaptcha_key }}', {action: 'form'})
+        .then(function(token) {
+            console.log("reCAPTCHA validated for  Setting input value...")
+            var element = document.querySelector('.g-recaptcha[data-widget-uuid="{{ widget_uuid }}"]');
+            element.value = token;
+        });
+    }
+
+    grecaptcha.ready(function() {
+      updateCaptcha();
+      setInterval(updateCaptcha, 110000)
+    });
+</script>
+
+<br>
+
+
+  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
+<div  class="row justify-content-center">
+    <p>Hello World
+      <div  class="col-4">
+<div class="card">
+<div class="card-body">
+<h4 class="card-title">Add Member</h4>
+    <form  action = "#"  autocomplete="off"  id = "form">
+    {% csrf_token %}
+
+        <input type="hidden" name="next" value="{{ next }}">
+        {{ form|crispy }}
+        <div  id="captcha" class="g-recaptcha" data-sitekey={{ recaptcha_key }} ></div>
+
+
+        <button type="button" class="btn btn-primary btn-block" id ="add">Add</button>
+        </form>
+
+        <!-- Resets reCAPTCHA widgetId2 upon submit. -->
+
+
+        <br>
+</div>
+</div>
+      </div>
+</div>
+{% if form.errors %}
+{% else %}
+<p>Data Submit </p>
+{% endif %}
+
+{% endblock %}
